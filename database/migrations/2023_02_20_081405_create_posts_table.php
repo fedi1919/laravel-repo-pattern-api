@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('brand_id');
             $table->string('title');
             $table->text('content');
             $table->integer('price', false, true);
@@ -21,6 +22,10 @@ return new class extends Migration
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('brand_id')
+                ->references('id')
+                ->on('brands')
                 ->onDelete('cascade');
             $table->timestamps();
         });

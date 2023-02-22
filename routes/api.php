@@ -24,6 +24,7 @@ Route::controller(PostController::class)->prefix('post')->group(function () {
     Route::get('/{postId}', 'show');
     Route::get('/user/{userId}', 'userPosts');
     Route::get('/category/{categoryId}', 'categoryPosts');
+    Route::get('/brand/{brandId}', 'brandPosts');
     Route::get('/search/{searchWord}', 'search');
     Route::post('/', 'store');
     Route::patch('/update/{postId}', 'update');

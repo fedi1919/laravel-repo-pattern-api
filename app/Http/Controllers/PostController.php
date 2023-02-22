@@ -10,7 +10,6 @@ use App\Traits\GlobalTrait;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 
 class PostController extends Controller
@@ -39,10 +38,7 @@ class PostController extends Controller
                 return $this->success(trans('messages.SUCCESS'), Response::HTTP_CREATED, $post);
             }
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
@@ -55,10 +51,7 @@ class PostController extends Controller
                 return $this->success(trans('messages.SUCCESS'), Response::HTTP_OK, $post);
             }
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
@@ -71,10 +64,7 @@ class PostController extends Controller
                 return $this->success(trans('messages.SUCCESS'), Response::HTTP_CREATED, $post);
             }
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
@@ -85,10 +75,7 @@ class PostController extends Controller
 
             return $this->success(trans('messages.SUCCESS'), Response::HTTP_NO_CONTENT);
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
@@ -101,10 +88,7 @@ class PostController extends Controller
                 return $this->success(trans('messages.SUCCESS'), Response::HTTP_OK, $posts);
             }
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
@@ -119,31 +103,33 @@ class PostController extends Controller
                 return $this->error('No content', Response::HTTP_NO_CONTENT);
             }
         } catch (Exception $e) {
-            return $this->error(
-                $e->getMessage(),
-                $e->getCode()
-            );
+            return $this->error($e->getMessage(), $e->getCode());
+        }
+    }
+
+    public function brandPosts($brandId) {
+        try {
+            $posts = $this->postRepository->getPostsByBrand($brandId);
+
+            if (count($posts) > 0) {
+                return $this->success(trans('messages.SUCCESS'), Response::HTTP_OK, $posts);
+            } else {
+                return $this->error('No content', Response::HTTP_NO_CONTENT);
+            }
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(), $e->getCode());
         }
     }
 
     public function search(Request $request, $searchWord)
     {
-        $posts = Post::where('title', 'like', '%' . $searchWord . '%');
+        try {
+            $posts = $this->postRepository->searchPost($request, $searchWord);
 
-        if (count($posts->get()) == 0) return $this->success('No content', Response::HTTP_NO_CONTENT);
-
-        if ($request->query('min_price')) {
-            $posts->where('price', '>=', $request->input('min_price'));
+            return $this->success(trans('message.SUCCESS'), Response::HTTP_CREATED, $posts);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(), $e->getCode());
         }
-
-        if ($request->query('max_price')) {
-            $posts->where('price', '<=', $request->input('max_price'));
-        }
-
-        if($request->query('rate')) {
-            $posts->where('rate', '=', $request->input('rate'));
-        }
-        return $this->success(trans('message.SUCCESS'), Response::HTTP_CREATED, $posts->get());
     }
 
 }

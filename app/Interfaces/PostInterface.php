@@ -7,6 +7,8 @@ interface PostInterface
     public function getAllPosts();
     public function getUserPosts($userId);
     public function getPostsByCategory($categoryId);
+    public function getPostsByBrand($brandId);
+    public function searchPost($request, $searchWord);
     public function createPost($request);
     public function getPostById($postId);
     public function updatePost($request, $postId);

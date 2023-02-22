@@ -11,6 +11,7 @@ class Post extends Model
 
     protected $fillable = [
         'user_id',
+        'brand_id',
         'title',
         'content',
         'price',
@@ -18,14 +19,21 @@ class Post extends Model
     ];
 
     /*
-     * Get the user of the post
+     * The user of the post
      */
     public function user(){
         return $this->belongsTo(User::class);
     }
 
     /*
-     * Get the categories of a post
+     * the Brand of the Post
+     */
+    public function brand() {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /*
+     * The categories of a post
      */
     public function categories() {
         return $this->belongsToMany(Category::class);
